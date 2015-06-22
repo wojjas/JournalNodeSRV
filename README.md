@@ -12,3 +12,4 @@ RESTful web API built using nodejs, express, passport...
 # Interact with this API
 Build a client or use Postman to:
 * Send a GET request to http://localhost:5000/ping  // Should respond with "pong".
+* Send a POST request to http://localhost:5000/ping // Should respond with what POST sent.

@@ -1,9 +1,13 @@
-var express = require('express');
-var app = express();
-var port     = process.env.PORT || 5000;
+var http = require('http');
+var app = null;
 
-app.get('/ping', function(req, res){
-    res.send('pong');
+// Config express:
+var expressCfg = require('./config/express.js')(app);
+app = expressCfg.app;
+
+// Routes:
+require('./controllers/pingCtrl.js')(app);
+
+http.createServer(app).listen(expressCfg.port, function () {
+    console.log("Server listening on port: " + expressCfg.port);
 });
-
-app.listen(port);
