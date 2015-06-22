@@ -8,8 +8,8 @@ var express = require('express');
         var module = {};
 
         app = express();
-        app.use(bodyParser.json()); // get information from html forms
         app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(bodyParser.json());
 
         module.port = process.env.PORT || 5000;
         module.app = app;
