@@ -23,13 +23,19 @@ Build a client or use Postman to:
 * Send a GET request to http://localhost:5000/ping  // Should respond with "pong".
 * Send a POST request to http://localhost:5000/ping // Should respond with what POST sent.
 
+* Send a POST request to http://localhost:5000/users // In body of the POST request send for instance:
+                                                     // {"username":"wojjas", "password":"007"}, Should add user to db.
+                                                     // if password is omitted or a already existing username specified:
+                                                     // server should respond with {"status":"<ERROR MESSAGE>"}.
+
+* Basic Auth, Username and Password have to be provided to access all routes besides /ping and POST to /users, that is
+  all the routes below:
+
+* Send a GET request to http://localhost:5000/users  // Should respond with all users in db.
+
 * Send a GET request to http://localhost:5000/notes // Should respond with all notes in db.
 * Send a POST request to http://localhost:5000/notes // Should respond with {"status":"OK"} and the note should be
                                                      // saved in db with the timeStamp set to current time.
 * Send a POST request to http://localhost:5000/notes // Should respond with {"status":"<ERROR MESSAGE>"}.
 
-* Send a GET request to http://localhost:5000/users  // Should respond with all users in db.
-* Send a POST request to http://localhost:5000/users // In body of the POST request send for instance:
-                                                     // {"username":"wojjas", "password":"007"}, Should add user to db.
-                                                     // is password is omitted or already existing username specified:
-                                                     // server should respond with {"status":"<ERROR MESSAGE>"}.
+

@@ -1,4 +1,8 @@
+/*
+    Used to perform CRUD action against the Users collection in the db.
+ */
 var mongoose = require('mongoose');
+var passport = require('../config/passport.js')();
 var User = require('../models/user.js');
 
 (function () {
@@ -8,8 +12,8 @@ var User = require('../models/user.js');
 
         // Routes:
         var userRoute = app.route('/users');
-        userRoute.get(readUsers);
-        userRoute.post(createUser);
+        userRoute.get(passport.isAuthenticated, readUsers());
+        userRoute.post(createUser);        // Unprotected route, no authorization required to create new users (sign up)
 
         function readUsers(req, res){
             var retMessage = "OK";

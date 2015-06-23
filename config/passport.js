@@ -1,12 +1,13 @@
 var passport = require('passport');
-//var BasicStrategy = require('passport-http').BasicStrategy;
+var BasicStrategy = require('passport-http').BasicStrategy;
+var User = require('../models/user.js');
 
 (function () {
     'use strict';
 
     module.exports = function(){
         var module = {};
-/*
+
         passport.use(new BasicStrategy(
             function (username, password, callback) {
                 User.findOne({username: username}, function(err, user){
@@ -16,6 +17,7 @@ var passport = require('passport');
 
                     //No user found with that user name:
                     if(!user){
+                        console.log("User %s failed to login, not found in db.", username);
                         return callback(null, false);
                     }
 
@@ -27,6 +29,7 @@ var passport = require('passport');
 
                         //Password did not match:
                         if(!isMatch) {
+                            console.log("User %s provided an incorrect password.", username);
                             return callback(null, false);
                         }
 
@@ -37,7 +40,7 @@ var passport = require('passport');
             }));
 
         module.isAuthenticated = passport.authenticate('basic', {session : false});
-  */
+
         return module;
     };
 
