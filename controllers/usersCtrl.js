@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var User = require('../models/usersCtrl.js');
+var User = require('../models/user.js');
 
 (function () {
     'use strict';
@@ -19,7 +19,7 @@ var User = require('../models/usersCtrl.js');
                     console.log(retMessage + ": " + err);
                 }
 
-                res.send({"status": retMessage, "documents": documents});
+                res.send({"status":retMessage, "documents": documents});
             });
         }
         function createUser(req, res){
@@ -32,7 +32,7 @@ var User = require('../models/usersCtrl.js');
                     console.log(retMessage + ' ' + err);
                 }
 
-                res.send('{"status":"' +retMessage + '"}');
+                res.send('{"status":"' + retMessage + '"}');
             });
         }
     };

@@ -1,4 +1,7 @@
 var http = require('http');
+var https = require('https');
+var httpsCfg = require('./config/https')();
+
 var app = null;
 
 // Config express:
@@ -11,7 +14,13 @@ require('./controllers/databaseCtrl.js')().connect();
 // Routes:
 require('./controllers/pingCtrl.js')(app);
 require('./controllers/notesCtrl.js')(app);
+require('./controllers/usersCtrl.js')(app);
 
+// Server, listen for requests:
 http.createServer(app).listen(expressCfg.port, function () {
     console.log("Server listening on port: " + expressCfg.port);
+});
+var httpsPort = expressCfg.port + 1;
+https.createServer(httpsCfg.options, app).listen(httpsPort, function () {
+    console.log("Server listening on port: " + httpsPort + " (for HTTPS requests)");
 });

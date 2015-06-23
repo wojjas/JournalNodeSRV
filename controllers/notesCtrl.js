@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Note = require('../models/notes.js');
+var Note = require('../models/note.js');
 
 (function () {
     'use strict';
@@ -19,7 +19,7 @@ var Note = require('../models/notes.js');
                     console.log(retMessage + ": " + err);
                 }
 
-                res.send({"status": retMessage, "documents": documents});
+                res.send({"status":retMessage, "documents": documents});
             });
         }
         function createNote(req, res){
@@ -32,7 +32,7 @@ var Note = require('../models/notes.js');
                     console.log(retMessage + ' ' + err);
                 }
 
-                res.send('{"status":"' +retMessage + '"}');
+                res.send('{"status":"' + retMessage + '"}');
             });
         }
     };

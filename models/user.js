@@ -16,8 +16,6 @@ var bcrypt = require('bcrypt-nodejs');
     UserSchema.pre('save', function (callback) {
         var user = this;
 
-        console.log('User pre-save, saving user-object: ', user);
-
         if(!user.isModified('password')){
             return callback();
         }
@@ -37,20 +35,14 @@ var bcrypt = require('bcrypt-nodejs');
         });
     });
 
-    UserSchema.pre("update", function(callback){
-        console.log('User pre-update, object: ', this);
-
-        return callback();
-    });
-    
-    UserSchema.methods.verifyPassword = function (password, callback) {
-        bcrypt.compare(password, this.password, function (err, isMatch) {
-            if(err) {
-                return callback(err);
-            }
-            callback(null, isMatch);
-        });
-    };
+    //UserSchema.methods.verifyPassword = function (password, callback) {
+    //    bcrypt.compare(password, this.password, function (err, isMatch) {
+    //        if(err) {
+    //            return callback(err);
+    //        }
+    //        callback(null, isMatch);
+    //    });
+    //};
 
     module.exports = mongoose.model('User', UserSchema);
 })();
