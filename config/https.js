@@ -8,8 +8,8 @@ var passPhrase = "öwjfoaisjf12053485ödjf";
 (function () {
     'use strict';
 
-    module.exports = function(app){
-        var tlsOptions = {};
+    module.exports = function(){
+        var module = {};
 
         var options = {
             key: fs.readFileSync(key_file),
@@ -19,10 +19,9 @@ var passPhrase = "öwjfoaisjf12053485ödjf";
             options.passphrase = passPhrase;
         }
 
-        tlsOptions.options = options;
-        tlsOptions.https = https;
+        module.options = options;
+        module.httpsModule = https;
 
-        return tlsOptions;
+        return module;
     }
-
 })();
