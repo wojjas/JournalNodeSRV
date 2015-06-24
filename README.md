@@ -20,6 +20,7 @@ When doing a POST set body to 'raw' and for instance '{"note" : "First note"}' a
 set header "Content-Type" to "application/json". (the letter is for the body-parser to work)
 
 Build a client or use Postman to:
+* Route ping is only available in development mode, that is if: app.get('env') === 'development'.
 * Send a GET request to http://localhost:5000/ping  // Should respond with "pong".
 * Send a POST request to http://localhost:5000/ping // Should respond with what POST sent.
 

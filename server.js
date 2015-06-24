@@ -1,6 +1,6 @@
 var http = require('http');
 var https = require('https');
-var httpsCfg = require('./config/https')();
+var httpsCfg = require('./config/https.js')();
 
 var app = null;
 
@@ -12,7 +12,9 @@ app = expressCfg.app;
 require('./controllers/databaseCtrl.js')().connect();
 
 // Routes:
-require('./controllers/pingCtrl.js')(app);
+if(app.get('env') === 'development'){
+    require('./controllers/pingCtrl.js')(app);
+}
 require('./controllers/notesCtrl.js')(app);
 require('./controllers/usersCtrl.js')(app);
 
