@@ -1,8 +1,6 @@
 /*
 * Used to perform CRUD action against the Notes collection in the db.
 * */
-
- var mongoose = require('mongoose');
 var Note = require('../models/note.js');
 var passport = require('../config/passport.js')();
 
@@ -13,8 +11,8 @@ var passport = require('../config/passport.js')();
 
         // Routes:
         var noteRoute = app.route('/notes');
-        noteRoute.get(passport.isAuthenticated, readNotes);
-        noteRoute.post(passport.isAuthenticated, createNote);
+        noteRoute.get(passport.isTokenValid, readNotes);
+        noteRoute.post(passport.isTokenValid, createNote);
 
         function readNotes(req, res){
             var retMessage = "OK";

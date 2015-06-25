@@ -15,6 +15,7 @@ require('./controllers/databaseCtrl.js')().connect();
 if(app.get('env') === 'development'){
     require('./controllers/pingCtrl.js')(app);
 }
+require('./controllers/loginCtrl.js')(app);
 require('./controllers/notesCtrl.js')(app);
 require('./controllers/usersCtrl.js')(app);
 

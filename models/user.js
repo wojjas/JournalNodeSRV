@@ -6,7 +6,8 @@ var bcrypt = require('bcrypt-nodejs');
 
     var UserSchema = mongoose.Schema({
             username: {type: "String", unique: true, required: true},
-            password: {type: "String", required: true}
+            password: {type: "String", required: true},
+            token: {type: "String"}
        }, {
             collection:'users'} //Optional but helps to understand what's going on.
     );                          //If omitted mongoose will add an "s" to User below and

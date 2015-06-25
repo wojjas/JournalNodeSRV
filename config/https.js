@@ -3,7 +3,8 @@ var https = require('https');
 
 var key_file = __dirname + '/gdtest.key';
 var crt_file = __dirname + '/gdtest.crt';
-var passPhrase = "öwjfoaisjf12053485ödjf";
+//TODO: use a better passPhrase
+var passPhrase = "use a better passPhrase";
 
 (function () {
     'use strict';

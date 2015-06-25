@@ -1,7 +1,6 @@
 /*
     Used to perform CRUD action against the Users collection in the db.
  */
-var mongoose = require('mongoose');
 var passport = require('../config/passport.js')();
 var User = require('../models/user.js');
 
@@ -12,9 +11,9 @@ var User = require('../models/user.js');
 
         // Routes:
         var userRoute = app.route('/users');
-        userRoute.get(passport.isAuthenticated, readUsers());
+        userRoute.get(passport.isTokenValid, readUsers);
         userRoute.post(createUser);        // Unprotected route, no authorization required to create new users (sign up)
-
+                                           // TODO: this route is unsafe for production, find a better solution.
         function readUsers(req, res){
             var retMessage = "OK";
             User.find({}, function (err, documents) {
