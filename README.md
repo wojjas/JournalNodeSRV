@@ -29,8 +29,17 @@ Build a client or use Postman to:
                                                      // if password is omitted or a already existing username specified:
                                                      // server should respond with {"status":"<ERROR MESSAGE>"}.
 
-* Basic Auth, Username and Password have to be provided to access all routes besides /ping and POST to /users, that is
-  all the routes below: (DEPRECATED, AS NEWER VERSION USES TOKENS, SEE BELOW)
+* Token based authorization. The user authenticates requesting /login with either GET or POST:
+GET: this route is guarded with passportjs' Basic Strategy, if user's credentials are verified correctly passportjs sets
+req.user and the request is handled creating a token (with token.sub = user._id), and sending it to the client.
+ or
+POST: this route is unprotected. It expects a username and password. If gotten they are matched against the db. If user
+is found and password matched a token with users._id as token.sub is created, and sent to client.
+Thus the result is the same as in GET above.
+
+All routes besides /users/login and /ping are protected with passportjs' Bearer Strategy, expecting a token.
+Send the token from POSTMAN as a header param:
+Authorization   Bearer <gotten-token>
 
 * Send a GET request to http://localhost:5000/users  // Should respond with all users in db.
 
@@ -40,15 +49,4 @@ Build a client or use Postman to:
 * Send a POST request to http://localhost:5000/notes // Should respond with {"status":"<ERROR MESSAGE>"}.
 
 
-* Token based authorization. The user authenticates requesting /login with either GET or POST:
-GET this route is guarded with passportjs' Basic Strategy, if user's credentials are verified passport sets req.user and
-the request is handled creating a token, saving it to the db (for the user in question) and sending it to the client.
- or
-POST this route is unprotected. It expects a username and password. If gotten they are matched against the db. If user
-is found and password matched a token is created, saved to db and sent to client. Thus the result is the same as in GET
-above.
-
-All routes besides /users/login and /ping are protected with passportjs' Bearer Strategy, expecting a token.
-Send the token from POSTMAN as a header param:
-Authorization   Bearer <gotten-token>
 

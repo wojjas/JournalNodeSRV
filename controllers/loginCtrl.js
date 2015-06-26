@@ -1,5 +1,6 @@
 var jwt = require('jwt-simple');
-var passport = require('../config/passport.js')();
+var moment = require('moment');
+var passportCfg = require('../config/passport.js')();
 var User = require('../models/user.js');
 
 (function () {
@@ -8,23 +9,22 @@ var User = require('../models/user.js');
     module.exports = function(app){
 
         // Routes:
-        app.get('/users/login', passport.isAuthenticated, getLogin);
+        app.get('/users/login', passportCfg.isAuthenticated, getLogin);
         app.post('/users/login', postLogin);
 
+        // This route is protected, req.user is set when request is authenticated thus known in this function.
         function getLogin(req, res){
             var retMessage = "OK";
-            var user = req.user._doc; // We only get here if we manage to authenticate the request, and then the user is known.
+            var user = req.user._doc;
 
-            // Create token, save it to db and return it to client:
+            // Create token, and return it to client:
             user.token = createToken(user);
-            updateUserWithToken(user, retMessage, function (token, retMessage) {
-                res.send({"status":retMessage, "token":token});
-            });
+            res.send({"status":retMessage, "token":user.token});
         }
 
-        //POST this route is unprotected. It expects a username and password. If gotten they are matched against the db. If user
-        //is found and password matched a token is created, saved to db and sent to client. Thus the result is the same as in GET
-        //above.
+        // This route is unprotected.
+        // It expects a username and password.
+        // If user is found and password matched a token is created and sent to client.
         function postLogin(req, res){
             var retMessage = "OK";
 
@@ -45,9 +45,7 @@ var User = require('../models/user.js');
 
                             if(isMatch){
                                 user.token = createToken(user);
-                                updateUserWithToken(user._doc, retMessage, function (token, retMessage) {
-                                    res.send({"status":retMessage, "token":token});
-                                });
+                                res.send({"status":retMessage, "token":user.token});
                             }
                         })
                     }
@@ -56,24 +54,14 @@ var User = require('../models/user.js');
         }
 
         function createToken(user){
+            var expires = moment().add('minutes', 2).valueOf();
             var payload = {
-                "iss":user.username
-                //"exp":Date.now().getTime() + 60 * 60 * 1000 // valid for one hour
+                "iss":passportCfg.tokenIssuer,
+                "sub":user._id,
+                "exp":expires
             }
-            //TODO: use a better secret
-            var secret = 'Should I use certificates private key for this?';
 
-            return jwt.encode(payload, secret);
-        }
-        function updateUserWithToken(user, retMessage, callback){
-            User.update({"_id":user._id}, user, function (err) {
-                if(err){
-                    console.log('Failed to update user token, ', err);
-                    retMessage = 'Failed to login.';
-                }
-
-                callback(user.token, retMessage);
-            });
+            return jwt.encode(payload, passportCfg.tokenSecret, 'HS256');
         }
     };
 

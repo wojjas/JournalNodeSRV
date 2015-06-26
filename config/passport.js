@@ -1,14 +1,18 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
-//var ClientJWTBearerStrategy = require('passport-oauth2-jwt-bearer').Strategy;
-var BearerStrategy = require('passport-http-bearer');
+var BearerStrategy = require('passport-http-jwt-bearer');
+
 var User = require('../models/user.js');
+var pjson = require('../package.json');
 
 (function () {
     'use strict';
 
     module.exports = function(){
         var module = {};
+
+        module.tokenSecret = "Should I use crypto to generate unique byte-sequence to use here?";
+        module.tokenIssuer = "www.proxoft.se, app: " + pjson.name + " ver: " + pjson.version;
 
         passport.use('basic', new BasicStrategy(
             function (username, password, callback) {
@@ -42,17 +46,25 @@ var User = require('../models/user.js');
             }
         ));
 
+        // This strategy verifies the token's signature and decodes it at the same time.
         passport.use('bearer', new BearerStrategy(
+            module.tokenSecret,
+            {issuer:module.tokenIssuer},
             function (token, callback) {
-                //TODO: Verify token, validate for authenticity!, check if expired...
-                User.findOne({token: token}, function(err, user){
+
+                if(isTokenExpired(token)){
+                    console.log("Authorization failed, provided token has expired.");
+                    return callback(null, false);
+                }
+
+                User.findById(token.sub, function(err, user){
                     if(err){
                         return callback(err);
                     }
 
-                    //No user found with that token:
+                    //User specified by token not found:
                     if(!user){
-                        console.log("Failed to authenticate user with specified token, not found in db.");
+                        console.log("Authorization failed, token.sub not found in db.");
                         return callback(null, false);
                     }
 
@@ -63,6 +75,10 @@ var User = require('../models/user.js');
 
         module.isAuthenticated = passport.authenticate('basic', {session : false});  // Use for authentication at login
         module.isTokenValid = passport.authenticate('bearer', {session : false});    // Use to protect any other route
+
+        function isTokenExpired(token){
+            return token.exp < new Date().getTime();
+        }
 
         return module;
     };
