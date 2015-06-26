@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 
-//(function () {
+(function () {
     'use strict';
 
     module.exports = function(){
         var module = {};
 
         module.connect = function(){
-            var dbConnectionString = 'mongodb://localhost:27017/journal'
+            var dbConnectionString = 'mongodb://localhost:27017/journal';
             mongoose.connect(dbConnectionString);
             var db = mongoose.connection;
 
@@ -15,9 +15,9 @@ var mongoose = require('mongoose');
             db.once('open', function () {
                 console.log('Opened db connection to: ' + dbConnectionString);
             });
-        }
+        };
 
         return module;
     };
 
-//})();
+})();

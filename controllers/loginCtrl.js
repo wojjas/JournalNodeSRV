@@ -54,12 +54,12 @@ var User = require('../models/user.js');
         }
 
         function createToken(user){
-            var expires = moment().add('minutes', 2).valueOf();
+            var expires = moment().add(9, 'hours').valueOf();
             var payload = {
                 "iss":passportCfg.tokenIssuer,
                 "sub":user._id,
                 "exp":expires
-            }
+            };
 
             return jwt.encode(payload, passportCfg.tokenSecret, 'HS256');
         }
