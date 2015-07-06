@@ -20,9 +20,10 @@ var passport = require('../config/passport.js')();
                 if(err){
                     retMessage = "Failed to read notes";
                     console.log(retMessage + ": " + err);
+                    res.status(500).send({"status":retMessage, "documents": documents});
+                }else{
+                    res.send({"status":retMessage, "documents": documents});
                 }
-
-                res.send({"status":retMessage, "documents": documents});
             });
         }
         function createNote(req, res){
@@ -33,9 +34,10 @@ var passport = require('../config/passport.js')();
                 if(err){
                     retMessage = 'Failed to save note.';
                     console.log(retMessage + ' ' + err);
+                    res.status(500).send({"status":retMessage});
+                }else{
+                    res.send('{"status":"' + retMessage + '"}');
                 }
-
-                res.send('{"status":"' + retMessage + '"}');
             });
         }
     };

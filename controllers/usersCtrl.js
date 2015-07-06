@@ -20,9 +20,10 @@ var User = require('../models/user.js');
                 if(err){
                     retMessage = "Failed to read users";
                     console.log(retMessage + ": " + err);
+                    res.status(500).send({"status":retMessage, "documents": documents});
+                }else{
+                    res.send({"status":retMessage, "documents": documents});
                 }
-
-                res.send({"status":retMessage, "documents": documents});
             });
         }
         function createUser(req, res){
@@ -33,12 +34,12 @@ var User = require('../models/user.js');
                 if(err){
                     retMessage = 'Failed to save user.';
                     console.log(retMessage + ' ' + err);
+                    res.status(500).send('{"status":"' + retMessage + '"}');
+                }else{
+                    res.send('{"status":"' + retMessage + '"}');
                 }
-
-                res.send('{"status":"' + retMessage + '"}');
             });
         }
     };
-
 })();
 

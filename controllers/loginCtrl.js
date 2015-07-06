@@ -30,15 +30,18 @@ var User = require('../models/user.js');
 
             if(!req.body || !req.body.username || !req.body.password){
                 retMessage = "Failed to login, insufficient credentials provided."
+                res.status(401).send({"status":retMessage});
             }else{
                 User.findOne({"username":req.body.username}, function (err, user) {
                     if(err){
                         retMessage = "Failed to find user.";
                         console.log(retMessage + ": " + err);
+                        res.status(401).send({"status":retMessage});
                     }
-                    if(!user){
+                    else if(!user){
                         retMessage = "Failed to find user.";
                         console.log(retMessage);
+                        res.status(401).send({"status":retMessage});
                     }else {
                         user.verifyPassword(req.body.password, function (err, isMatch) {
                             err && console.log(err);
