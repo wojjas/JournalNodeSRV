@@ -11,6 +11,7 @@ RESTful web API built using nodejs, express, passport...
 
 # Interact with this API
 Here is described how to use Google's POSTMAN to interact with the API.
+Further below find examples for using curl.
 
 The port (in examples below 5000) is set in /config/express.js
 Change the port in the examples below to 5001 to access the server via HTTPS.
@@ -50,4 +51,23 @@ POST | http://localhost:5000/notes | Put note-object into body, for example: _{n
 POST | http://localhost:5000/notes | Should respond with _{"status":"error-message"}_.
 
 
+# Using curl
+## Prepare
+### Add user(s)
+Check if db contains users. If not create some. 
+#### The easy way
+curl -H "Content-Type: application/json" -X POST -d '{"username":"wojjas","password":"007"}' http://localhost:5000/users
+#### The hard way
+Directly to db:
+db.getCollection('users').insert({"username":"wojjas", "password":"$2a$10$wtsqIsILPKCNN.kmpvr8Z.a4bEzEHYquYR.9KGb.PHYMCRYjXE1Ei"})
+The password is generated using some online bcrypt generator. ("007" gave this nonsense)
 
+## Test using curl
+### Login
+curl -H "Content-Type: application/json" -X POST -d '{"username":"wojjas","password":"007"}' http://localhost:5000/users/login
+### Get all users 
+(replace <token> with gotten as response to login)
+curl -H "Authorization: Bearer <token>" -X GET http://localhost:5000/users
+### Add a note (can't get this to work at the moment)
+curl -H "Authorization: Bearer <token>" -X POST -d '{"note":"A note about something"}' http://localhost:5000/notes
+### Get all notes
